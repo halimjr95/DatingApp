@@ -42,6 +42,7 @@ namespace DatingApp
             Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
             services.AddTransient<seeding>();
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.AddCors();
             services.AddAutoMapper();
             services.AddScoped<IDatingRepository, DatingRepository>();
