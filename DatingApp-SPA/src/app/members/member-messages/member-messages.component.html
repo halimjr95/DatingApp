@@ -1,0 +1,64 @@
+<div class="card">
+    <div class="card-body">
+        <div class="tab-pane message-body">
+            <div class="message-chat">
+                <div *ngIf="messages?.length === 0">
+                    <p>No messages yet ..</p>
+                </div>
+                <ul class="chat-body">
+                    <li *ngFor="let message of messages">
+                        <div class="message info">
+                            <div *ngIf="message.senderId == recipientId">
+                                <img alt="" class="img-circle medium-image" src="{{message.senderPhotoUrl}}">
+                                <div class="message-body">
+                                    <div class="message-info">
+                                        <h4> {{message.senderKnownAs}} </h4>
+                                        <h5> <i class="fa fa-clock-o"></i> {{message.messageSent | timeAgo}} </h5>
+                                    </div>
+                                    <hr>
+                                    <div class="message-text">
+                                        {{message.content}}
+                                    </div>
+                                </div>
+                                <br>
+                            </div>
+                        </div>
+                        <div class="message my-message">
+                            <div *ngIf="message.senderId != recipientId">
+                                <img alt="" class="img-circle medium-image" src="{{message.senderPhotoUrl}}">
+                                <div class="message-body">
+                                    <div class="message-body-inner">
+                                        <div class="message-info">
+                                            <h4> {{message.senderKnownAs}} </h4>
+                                            <h5> <i class="fa fa-clock-o"></i> {{message.messageSent | timeAgo}} </h5>
+                                            <h5 *ngIf="!message.isRead" class="text-danger">(Unread)</h5>
+                                            <h5 *ngIf="message.isRead" class="text-success">(Read {{message.dateRead | timeAgo}})</h5>
+                                        </div>
+                                        <hr>
+                                        <div class="message-text">
+                                            {{message.content}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                        </div>
+                    </li>
+                </ul>
+                <div class="chat-footer">
+                    <form #messageForm="ngForm" (ngSubmit)=" messageForm.valid && sendMessage()" >
+                        <div class="input-group">
+                            <input type="text" [(ngModel)]="newMessage.content"
+                             name="content"
+                             required
+                              class="form-control input-sm" placeholder="send a private message">
+                            <div class="input-group-append">
+                                <button [disabled]="!messageForm.valid" class="send-message-button btn-info"><i class="fa fa-send"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
