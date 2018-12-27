@@ -11,7 +11,7 @@ import { catchError } from 'rxjs/operators';
 export class MemberListResolver implements Resolve<User[]> {
 
     pageNumber = 1;
-    pageSize = 5;
+    pageSize = 12;
     constructor(private router: Router, private userService: UserService,
          private alertify: AlertifyService) {}
 

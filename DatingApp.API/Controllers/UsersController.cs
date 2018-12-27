@@ -35,10 +35,10 @@ namespace DatingApp.API.Controllers
 
             userParams.UserId = userFromRepo.Id;
 
-            if (string.IsNullOrEmpty(userParams.Gender))
-            {
-                userParams.Gender = userFromRepo.Gender == "male" ? "female" : "male";
-            }
+            // if (string.IsNullOrEmpty(userParams.Gender))
+            // {
+            //     userParams.Gender = userFromRepo.Gender == "male" ? "female" : "male";
+            // }
 
             var users = await _repo.GetUsers(userParams);
 
@@ -100,6 +100,33 @@ namespace DatingApp.API.Controllers
                 return Ok();
 
             return BadRequest("Failed to like this user");
+        }
+
+        [HttpPost("{likerId}/unlike/{recipientId}")]
+        public async Task<IActionResult> UnLikeUser(int likerId, int recipientId)
+        {
+            if (likerId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+
+            var like = await _repo.GetLike(likerId, recipientId);
+
+            if (like == null)
+                return BadRequest("You already Unlike this user");
+
+            if (await _repo.GetUser(recipientId) == null)
+                return NotFound();
+
+            if (like.LikerId == likerId)
+            {
+                _repo.Delete<Like>(like);
+            }
+
+            _repo.Delete<Like>(like);
+
+            if (await _repo.SaveAll())
+                return Ok();
+
+            return BadRequest("Failed to Unlike this user");
         }
     }
 }
